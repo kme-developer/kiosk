@@ -1,3 +1,4 @@
 import { TestController } from './test.controller';
+import { ItemController } from './item.controller';
 
-export { TestController };
+export { TestController, ItemController };
