@@ -1,18 +1,18 @@
 import { Model, DataTypes } from 'sequelize';
 import sequelize from '../sequelize';
 
-const itemType = {
-  COFFEE: 'coffee',
-  DESERT: 'desert',
-  JUICE: 'juice',
-  TEA: 'tea',
+const orderState = {
+  ORDERED: 'ordered',
+  PENDING: 'pending',
+  COMPLETED: 'completed',
+  CANCELED: 'canceled',
 };
 
-class Items extends Model {}
+class Orders extends Model {}
 
-Items.init(
+Orders.init(
   {
-    item_id: {
+    order_id: {
       allowNull: false, // NOT NULL
       autoIncrement: true, // AUTO_INCREMENT
       primaryKey: true, // PK
@@ -28,34 +28,25 @@ Items.init(
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW,
     },
-    name: {
-      allowNull: false, // NOT NULL
-      type: DataTypes.STRING,
-      unique: true, // UNIQUE
+    isUser: {
+      allowNull: true,
+      type: DataTypes.BOOLEAN,
     },
-    option_id: {
+    user_id: {
       allowNull: true,
       type: DataTypes.INTEGER,
       defaultValue: 0,
     },
-    price: {
+    state: {
       allowNull: false, // NOT NULL
-      type: DataTypes.INTEGER,
-    },
-    type: {
-      allowNull: false, // NOT NULL
-      type: DataTypes.ENUM([itemType.COFFEE, itemType.DESERT, itemType.JUICE, itemType.TEA]),
-    },
-    amount: {
-      allowNull: true,
-      type: DataTypes.INTEGER,
-      defaultValue: 0,
+      type: DataTypes.ENUM([orderState.ORDERED, orderState.PENDING, orderState.COMPLETED, orderState.CANCELED]),
+      defaultValue: orderState.ORDERED,
     },
   },
   {
     sequelize,
-    modelName: 'Items',
+    modelName: 'Orders',
   }
 );
 
-export { Items, itemType };
+export { Orders, orderState };

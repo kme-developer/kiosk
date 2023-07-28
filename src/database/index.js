@@ -1,6 +1,8 @@
 import sequelize from './sequelize';
 
-import Item from './models/item';
+import { Items } from './models/item';
+import { Orders } from './models/order';
+import { OrderItems } from './models/orderItem';
 
 import relations from './relations';
 
@@ -8,4 +10,4 @@ Object.values(relations).forEach((excuteRelation) => {
   excuteRelation();
 });
 
-export { sequelize, Item };
+export { sequelize, Items, Orders, OrderItems };
