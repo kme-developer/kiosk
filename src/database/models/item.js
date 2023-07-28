@@ -55,7 +55,7 @@ Item.init(
   {
     sequelize,
     modelName: 'Item',
-  }
+  },
 );
 
 export { Item, itemType };

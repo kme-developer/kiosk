@@ -7,7 +7,7 @@ const router = express.Router();
 
 // http://localhost:3000/api
 router.use('/', testRouter);
-// http://localhost:3000/api/item
-router.use('/item', itemRouter);
+// http://localhost:3000/api/
+router.use('/', itemRouter);
 
 export default router;

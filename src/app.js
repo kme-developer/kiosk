@@ -38,11 +38,24 @@ export class Server {
     this.app.use('/api', routes);
   }
 
-  start() {
+  serverListen = () => {
     this.app.listen(this.port, () => {
       console.log(`Server is running on http://localhost:${this.port}`);
     });
-  }
+  };
+
+  serverErrorHandler = (error) => {
+    console.log('Server Run Error: ', error.message);
+  };
+
+  start = async () => {
+    try {
+      await this.databaseConnection();
+      return this.serverListen();
+    } catch (error) {
+      return this.serverErrorHandler(error);
+    }
+  };
 }
 
 const server = new Server();
