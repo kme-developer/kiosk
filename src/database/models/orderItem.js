@@ -5,12 +5,6 @@ class OrderItems extends Model {}
 
 OrderItems.init(
   {
-    id: {
-      allowNull: false, // NOT NULL
-      autoIncrement: true, // AUTO_INCREMENT
-      primaryKey: true, // PK
-      type: DataTypes.INTEGER,
-    },
     item_id: {
       allowNull: false, // NOT NULL
       type: DataTypes.INTEGER,
@@ -40,4 +34,4 @@ OrderItems.init(
   }
 );
 
-export { OrderItems };
+export default OrderItems;

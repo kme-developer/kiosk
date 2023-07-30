@@ -1,13 +1,15 @@
+// src/database/index.js
+
 import sequelize from './sequelize';
 
-import { Items } from './models/item';
-import { Orders } from './models/order';
-import { OrderItems } from './models/orderItem';
+import Items from './models/item';
+import Orders from './models/order';
+import OrderItems from './models/orderItem';
 
-import relations from './relations';
+import modelRelations from './relations/index';
 
-Object.values(relations).forEach((excuteRelation) => {
-  excuteRelation();
+Object.values(modelRelations).forEach((relationsFunction) => {
+  relationsFunction();
 });
 
 export { sequelize, Items, Orders, OrderItems };

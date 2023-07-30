@@ -1,5 +1,6 @@
+// src/app.js
+
 import express from 'express';
-import cookieParser from 'cookie-parser';
 import sequelize from './database/sequelize';
 import routes from './routes';
 
@@ -31,7 +32,6 @@ export class Server {
 
   initMiddlewares() {
     this.app.use(express.json());
-    this.app.use(cookieParser());
   }
 
   initRoutes() {
@@ -53,6 +53,7 @@ export class Server {
       await this.databaseConnection();
       return this.serverListen();
     } catch (error) {
+      console.error(error);
       return this.serverErrorHandler(error);
     }
   };

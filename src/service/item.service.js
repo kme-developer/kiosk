@@ -1,4 +1,5 @@
-import { Item, itemType } from '../database/models/item';
+import { Items } from '../database/models';
+import { itemType } from '../database/enum';
 
 export class ItemService {
   postItem = async (name, price, type) => {
@@ -15,7 +16,7 @@ export class ItemService {
     }
 
     try {
-      await Item.create({
+      await Items.create({
         name: name,
         option_id: 0, // default
         price: price,
@@ -35,7 +36,7 @@ export class ItemService {
   getItem = async (type) => {
     try {
       if (!type) {
-        const allItems = await Item.findAll({});
+        const allItems = await Items.findAll({});
         return {
           result: allItems,
         };
@@ -45,7 +46,7 @@ export class ItemService {
             message: '상품 유형을 올바르게 입력해주세요.',
           };
         }
-        const itemsWithType = await Item.findAll({ where: { type } });
+        const itemsWithType = await Items.findAll({ where: { type } });
         return {
           result: itemsWithType,
         };
@@ -71,7 +72,7 @@ export class ItemService {
     }
 
     try {
-      await Item.update({ name, price }, { where: { item_id: itemId } });
+      await Items.update({ name, price }, { where: { id: itemId } });
       return {
         message: 'item, method: put => success',
       };
@@ -83,10 +84,10 @@ export class ItemService {
   };
 
   deleteItem = async (itemId) => {
-    const item = await Item.findOne({ where: { item_id: itemId } });
+    const item = await Items.findOne({ where: { id: itemId } });
     if (item.amount === 0) {
       try {
-        await Item.destroy({ where: { item_id: itemId } });
+        await Items.destroy({ where: { id: itemId } });
         return {
           message: 'item, method: delete => success',
         };
@@ -105,7 +106,7 @@ export class ItemService {
   deleteItemWithResponse = async (itemId, answer) => {
     if (answer === '예') {
       try {
-        await Item.destroy({ where: { item_id: itemId } });
+        await Items.destroy({ where: { id: itemId } });
         return {
           message: 'item, method: delete => success',
         };

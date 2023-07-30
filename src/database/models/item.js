@@ -1,18 +1,13 @@
+// src/database/models/item.js
+
 import { Model, DataTypes } from 'sequelize';
 import sequelize from '../sequelize';
-
-const itemType = {
-  COFFEE: 'coffee',
-  DESERT: 'desert',
-  JUICE: 'juice',
-  TEA: 'tea',
-};
 
 class Items extends Model {}
 
 Items.init(
   {
-    item_id: {
+    id: {
       allowNull: false, // NOT NULL
       autoIncrement: true, // AUTO_INCREMENT
       primaryKey: true, // PK
@@ -44,7 +39,8 @@ Items.init(
     },
     type: {
       allowNull: false, // NOT NULL
-      type: DataTypes.ENUM([itemType.COFFEE, itemType.DESERT, itemType.JUICE, itemType.TEA]),
+      type: DataTypes.ENUM,
+      values: ['coffee', 'desert', 'juice', 'tea'],
     },
     amount: {
       allowNull: true,
@@ -58,4 +54,4 @@ Items.init(
   }
 );
 
-export { Items, itemType };
+export default Items;
