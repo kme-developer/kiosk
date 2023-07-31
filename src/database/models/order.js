@@ -24,6 +24,7 @@ Orders.init(
     isUser: {
       allowNull: true,
       type: DataTypes.BOOLEAN,
+      defaultValue: false,
     },
     user_id: {
       allowNull: true,

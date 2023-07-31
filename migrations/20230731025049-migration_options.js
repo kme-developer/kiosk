@@ -3,7 +3,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Orders', {
+    await queryInterface.createTable('Options', {
       id: {
         allowNull: false, // NOT NULL
         autoIncrement: true, // AUTO_INCREMENT
@@ -20,23 +20,24 @@ module.exports = {
         type: Sequelize.DATE,
         defaultValue: Sequelize.fn('now'),
       },
-      isUser: {
+      extra_price: {
+        allowNull: true,
+        type: Sequelize.INTEGER,
+        defaultValue: 0,
+      },
+      shot_price: {
+        allowNull: true,
+        type: Sequelize.INTEGER,
+        defaultValue: 0,
+      },
+      hot: {
         allowNull: true,
         type: Sequelize.BOOLEAN,
-      },
-      user_id: {
-        allowNull: true,
-        type: Sequelize.INTEGER,
-        defaultValue: 0,
-      },
-      state: {
-        allowNull: true,
-        type: Sequelize.INTEGER,
-        defaultValue: 0,
+        defaultValue: true, // false => only ICE
       },
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Orders');
+    await queryInterface.dropTable('Options');
   },
 };

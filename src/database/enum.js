@@ -3,7 +3,6 @@
 const itemType = {
   COFFEE: 'coffee',
   DESERT: 'desert',
-  JUICE: 'juice',
   TEA: 'tea',
 };
 

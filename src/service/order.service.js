@@ -1,8 +1,53 @@
-import { Items, Orders, OrderItems } from '../database/models';
+import { Items } from '../database/models/item';
+import { Orders } from '../database/models/order';
+import { OrderItems } from '../database/models/orderItem';
 import { orderState } from '../database/enum';
 import { Transaction } from 'sequelize';
 
 export class OrderService {
+  postOrder = async () => {
+    try {
+      await Orders.create({
+        isUser: null,
+        user_id: 0, // default
+        state: 0, // default
+      });
+      return {
+        message: 'order, method: post => success',
+      };
+    } catch (error) {
+      return {
+        message: 'internal server error',
+      };
+    }
+  };
+
+  postOrderItem = async (itemId, orderId, amount, option) => {
+    if (!option) {
+      return {
+        message: '상품의 option 값이 존재하지 않습니다.',
+      };
+    }
+
+    try {
+      const item = await Items.findOne({ where: { id: itemId } });
+      await OrderItems.create({
+        item_id: itemId,
+        order_id: orderId,
+        amount: amount, // defaultValue: 1
+        option: option, // json
+        price: item.price + option.extra + option.shot,
+      });
+      return {
+        message: 'orderItem, method: post => success',
+      };
+    } catch (error) {
+      return {
+        message: 'internal server error',
+      };
+    }
+  };
+
   updateState = async (orderId, state) => {
     if (!Object.values(orderState).includes(type)) {
       return {
@@ -16,6 +61,7 @@ export class OrderService {
         message: '해당 주문을 찾을 수 없습니다.',
       };
     }
+
     // TRANSACTION
     const transaction = await sequelize.transaction({
       isolationLevel: Transaction.ISOLATION_LEVELS.READ_COMMITTED,
@@ -42,10 +88,10 @@ export class OrderService {
         // PENDING => COMPLETED
         if (state === orderState.COMPLETED) {
           try {
-            await Orders.update({ state }, { where: { id: orderId }, transaction: transaction });
+            await Orders.update({ state }, { where: { id: orderId } }, { transaction: transaction });
             const orderItems = await OrderItems.findAll({ where: { orderId } });
             const item_ids = orderItems.map((orderItem) => orderItem.item_id);
-            await Items.update({ amount: Sequelize.literal('amount + 1') }, { where: { id: item_ids }, transaction: transaction });
+            await Items.update({ amount: Sequelize.literal('amount + 1') }, { where: { id: item_ids } }, { transaction: transaction });
             transaction.commit();
             return {
               message: 'state: pending => completed',
@@ -70,10 +116,11 @@ export class OrderService {
         // COMPLETED => CANCELED
         if (state === orderState.CANCELED) {
           try {
-            await Orders.update({ state }, { where: { id: orderId }, transaction: transaction });
+            await Orders.update({ state }, { where: { id: orderId } }, { transaction: transaction });
             const orderItems = await OrderItems.findAll({ where: { orderId } });
             const item_ids = orderItems.map((orderItem) => orderItem.item_id);
-            await Items.update({ amount: Sequelize.literal('amount - 1') }, { where: { id: item_ids }, transaction: transaction });
+            await Items.update({ amount: Sequelize.literal('amount - 1') }, { where: { id: item_ids } }, { transaction: transaction });
+            await OrderItems.destroy({ where: { order_id: orderId } }, { transaction: transaction });
             transaction.commit();
             return {
               message: 'state: pending => completed',

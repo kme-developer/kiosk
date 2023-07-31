@@ -1,4 +1,4 @@
-import { Items } from '../database/models';
+import { Items } from '../database/models/item';
 import { itemType } from '../database/enum';
 
 export class ItemService {

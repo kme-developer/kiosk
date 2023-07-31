@@ -26,9 +26,8 @@ module.exports = {
         unique: true, // UNIQUE
       },
       option_id: {
-        allowNull: true,
+        allowNull: false, // NOT NULL
         type: Sequelize.INTEGER,
-        defaultValue: 0,
       },
       price: {
         allowNull: false, // NOT NULL
@@ -37,7 +36,7 @@ module.exports = {
       type: {
         allowNull: false, // NOT NULL
         type: Sequelize.ENUM,
-        values: ['coffee', 'desert', 'juice', 'tea'],
+        values: ['coffee', 'desert', 'tea'],
       },
       amount: {
         allowNull: true,

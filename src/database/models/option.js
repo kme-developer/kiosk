@@ -1,11 +1,11 @@
-// src/database/models/item.js
+// src/database/models/option.js
 
 import { Model, DataTypes } from 'sequelize';
 import sequelize from '../sequelize';
 
-class Items extends Model {}
+class Options extends Model {}
 
-Items.init(
+Options.init(
   {
     id: {
       allowNull: false, // NOT NULL
@@ -23,34 +23,26 @@ Items.init(
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW,
     },
-    name: {
-      allowNull: false, // NOT NULL
-      type: DataTypes.STRING,
-      unique: true, // UNIQUE
-    },
-    option_id: {
-      allowNull: false, // NOT NULL
-      type: DataTypes.INTEGER,
-    },
-    price: {
-      allowNull: false, // NOT NULL
-      type: DataTypes.INTEGER,
-    },
-    type: {
-      allowNull: false, // NOT NULL
-      type: DataTypes.ENUM,
-      values: ['coffee', 'desert', 'tea'],
-    },
-    amount: {
+    extra_price: {
       allowNull: true,
       type: DataTypes.INTEGER,
       defaultValue: 0,
     },
+    shot_price: {
+      allowNull: true,
+      type: DataTypes.INTEGER,
+      defaultValue: 0,
+    },
+    hot: {
+      allowNull: true,
+      type: DataTypes.BOOLEAN,
+      defaultValue: true, // false => only ICE
+    },
   },
   {
     sequelize,
-    modelName: 'Items',
+    modelName: 'Options',
   }
 );
 
-export default Items;
+export default Options;
