@@ -1,7 +1,9 @@
 // src/app.js
 
 import express from 'express';
+import cookieParser from 'cookie-parser';
 import sequelize from './database/sequelize';
+import initCacheOption from './cache/init.option';
 import routes from './routes';
 
 import dotenv from 'dotenv';
@@ -20,18 +22,20 @@ export class Server {
     return this.sequelizeAuthenticate().then(this.sequelizeSync);
   };
 
-  // 연결 확인
+  // connection
   sequelizeAuthenticate = () => {
     return sequelize.authenticate();
   };
 
-  // 동기화
+  // sync
   sequelizeSync = () => {
     return sequelize.sync({ force: false });
   };
 
   initMiddlewares() {
     this.app.use(express.json());
+    this.app.use(express.urlencoded({ extended: false }));
+    this.app.use(cookieParser());
   }
 
   initRoutes() {
@@ -51,6 +55,7 @@ export class Server {
   start = async () => {
     try {
       await this.databaseConnection();
+      await initCacheOption();
       return this.serverListen();
     } catch (error) {
       console.error(error);

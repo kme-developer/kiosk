@@ -1,13 +1,16 @@
-import { Options } from '../database/models/orderItem';
+import Options from '../database/models/option';
+import Cache from '../cache/cache';
 
 export class OptionService {
-  createOption = async (extraPrice, shotPrice, hot) => {
+  createOption = async (name, extraPrice, shotPrice, hot) => {
     try {
       await Options.create({
+        name: name,
         extra_price: extraPrice,
         shot_price: shotPrice,
-        hot: hot, // defaultValue: true
+        hot: hot,
       });
+      Cache.flushCache();
       return {
         message: 'option, method: post => success',
       };
@@ -21,6 +24,7 @@ export class OptionService {
   deleteOption = async (optionId) => {
     try {
       await Options.destroy({ where: { id: optionId } });
+      Cache.flushCache();
       return {
         message: 'option, method: delete => success',
       };

@@ -21,7 +21,7 @@ export class ItemService {
         option_id: 0, // default
         price: price,
         type: type,
-        amount: 0, // default
+        count: 0, // default
       });
       return {
         message: 'item, method: post => success',
@@ -85,7 +85,7 @@ export class ItemService {
 
   deleteItem = async (itemId) => {
     const item = await Items.findOne({ where: { id: itemId } });
-    if (item.amount === 0) {
+    if (item.count === 0) {
       try {
         await Items.destroy({ where: { id: itemId } });
         return {
@@ -98,7 +98,7 @@ export class ItemService {
       }
     } else {
       return {
-        message: '현재 수량이 남아있습니다. 삭제하시겠습니까?',
+        message: '판매 이력이 존재합니다. 삭제하시겠습니까?',
       };
     }
   };

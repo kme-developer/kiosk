@@ -1,15 +1,15 @@
-import { Items } from '../database/models/item';
-import { Orders } from '../database/models/order';
-import { OrderItems } from '../database/models/orderItem';
+import Items from '../database/models/item';
+import Orders from '../database/models/order';
+import OrderItems from '../database/models/orderItem';
 import { orderState } from '../database/enum';
 import { Transaction } from 'sequelize';
 
 export class OrderService {
-  postOrder = async () => {
+  postOrder = async (userId) => {
     try {
       await Orders.create({
-        isUser: null,
-        user_id: 0, // default
+        isUser: !!userId,
+        user_id: userId || null,
         state: 0, // default
       });
       return {
@@ -35,7 +35,7 @@ export class OrderService {
         item_id: itemId,
         order_id: orderId,
         amount: amount, // defaultValue: 1
-        option: option, // json
+        option: option, // JSON
         price: item.price + option.extra + option.shot,
       });
       return {
@@ -91,7 +91,7 @@ export class OrderService {
             await Orders.update({ state }, { where: { id: orderId } }, { transaction: transaction });
             const orderItems = await OrderItems.findAll({ where: { orderId } });
             const item_ids = orderItems.map((orderItem) => orderItem.item_id);
-            await Items.update({ amount: Sequelize.literal('amount + 1') }, { where: { id: item_ids } }, { transaction: transaction });
+            await Items.update({ count: Sequelize.literal('count + 1') }, { where: { id: item_ids } }, { transaction: transaction });
             transaction.commit();
             return {
               message: 'state: pending => completed',
@@ -119,7 +119,7 @@ export class OrderService {
             await Orders.update({ state }, { where: { id: orderId } }, { transaction: transaction });
             const orderItems = await OrderItems.findAll({ where: { orderId } });
             const item_ids = orderItems.map((orderItem) => orderItem.item_id);
-            await Items.update({ amount: Sequelize.literal('amount - 1') }, { where: { id: item_ids } }, { transaction: transaction });
+            await Items.update({ count: Sequelize.literal('count - 1') }, { where: { id: item_ids } }, { transaction: transaction });
             await OrderItems.destroy({ where: { order_id: orderId } }, { transaction: transaction });
             transaction.commit();
             return {
@@ -136,7 +136,7 @@ export class OrderService {
       }
     } catch (error) {
       return {
-        message: '잘못된 요청입니다.',
+        message: 'internal server error',
       };
     }
   };

@@ -20,6 +20,11 @@ module.exports = {
         type: Sequelize.DATE,
         defaultValue: Sequelize.fn('now'),
       },
+      name: {
+        allowNull: false,
+        type: Sequelize.STRING,
+        unique: true, // UNIQUE
+      },
       extra_price: {
         allowNull: true,
         type: Sequelize.INTEGER,
@@ -33,7 +38,7 @@ module.exports = {
       hot: {
         allowNull: true,
         type: Sequelize.BOOLEAN,
-        defaultValue: true, // false => only ICE
+        defaultValue: true,
       },
     });
   },

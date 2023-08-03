@@ -1,11 +1,9 @@
-// src/database/models/option.js
-
 import { Model, DataTypes } from 'sequelize';
 import sequelize from '../sequelize';
 
-class Options extends Model {}
+class Managers extends Model {}
 
-Options.init(
+Managers.init(
   {
     id: {
       allowNull: false, // NOT NULL
@@ -23,31 +21,24 @@ Options.init(
       type: DataTypes.DATE,
       defaultValue: DataTypes.NOW,
     },
-    name: {
-      allowNull: false,
+    email: {
+      allowNull: false, // NOT NULL
       type: DataTypes.STRING,
       unique: true, // UNIQUE
     },
-    extra_price: {
-      allowNull: true,
-      type: DataTypes.INTEGER,
-      defaultValue: 0,
+    password: {
+      allowNull: false, // NOT NULL
+      type: DataTypes.STRING,
     },
-    shot_price: {
-      allowNull: true,
-      type: DataTypes.INTEGER,
-      defaultValue: 0,
-    },
-    hot: {
-      allowNull: true,
-      type: DataTypes.BOOLEAN,
-      defaultValue: true,
+    name: {
+      allowNull: false, // NOT NULL
+      type: DataTypes.STRING,
     },
   },
   {
     sequelize,
-    modelName: 'Options',
+    modelName: 'Managers',
   }
 );
 
-export default Options;
+export default Managers;

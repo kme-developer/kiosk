@@ -1,14 +1,15 @@
-import { OrderService, ResponseService } from '../service';
+import { ManagerService } from '../service/manager.service';
+import { ResponseService } from '../service';
 
-export class OrderController {
-  _orderService = new OrderService();
+export class ManagerController {
+  _managerService = new ManagerService();
   _responseService = new ResponseService();
 
-  postOrder = (req, res) => {
-    const { userId } = req.user;
+  postManager = (req, res) => {
+    const { email, password, name } = req.body;
 
-    this._orderService
-      .postOrder(userId)
+    this._managerService
+      .postManager(email, password, name)
       .then((body) => {
         this._responseService.sendResponse(res, 200, true, body);
       })
@@ -17,12 +18,11 @@ export class OrderController {
       });
   };
 
-  postOrderItem = (req, res) => {
-    const { itemId, orderId } = req.params;
-    const { amount, option } = req.body;
+  login = (req, res) => {
+    const { email, password } = req.body;
 
-    this._orderService
-      .postOrderItem(itemId, orderId, amount, option)
+    this._managerService
+      .login(email, password)
       .then((body) => {
         this._responseService.sendResponse(res, 200, true, body);
       })
@@ -31,12 +31,11 @@ export class OrderController {
       });
   };
 
-  updateState = (req, res) => {
-    const { orderId } = req.params;
-    const { state } = req.body;
+  deleteManager = (req, res) => {
+    const { id } = req.manager;
 
-    this._orderService
-      .updateState(orderId, state)
+    this._managerService
+      .deleteManager(id)
       .then((body) => {
         this._responseService.sendResponse(res, 200, true, body);
       })

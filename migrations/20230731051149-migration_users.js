@@ -3,7 +3,7 @@
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up(queryInterface, Sequelize) {
-    await queryInterface.createTable('Items', {
+    await queryInterface.createTable('Users', {
       id: {
         allowNull: false, // NOT NULL
         autoIncrement: true, // AUTO_INCREMENT
@@ -20,32 +20,18 @@ module.exports = {
         type: Sequelize.DATE,
         defaultValue: Sequelize.fn('now'),
       },
-      name: {
+      email: {
         allowNull: false, // NOT NULL
         type: Sequelize.STRING,
         unique: true, // UNIQUE
       },
-      option_id: {
+      password: {
         allowNull: false, // NOT NULL
-        type: Sequelize.INTEGER,
-      },
-      price: {
-        allowNull: false, // NOT NULL
-        type: Sequelize.INTEGER,
-      },
-      type: {
-        allowNull: false, // NOT NULL
-        type: Sequelize.ENUM,
-        values: ['ade', 'coffee', 'desert', 'tea'],
-      },
-      count: {
-        allowNull: true,
-        type: Sequelize.INTEGER,
-        defaultValue: 0,
+        type: Sequelize.STRING,
       },
     });
   },
   async down(queryInterface, Sequelize) {
-    await queryInterface.dropTable('Items');
+    await queryInterface.dropTable('Users');
   },
 };

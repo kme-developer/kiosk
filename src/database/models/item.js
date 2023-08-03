@@ -39,9 +39,9 @@ Items.init(
     type: {
       allowNull: false, // NOT NULL
       type: DataTypes.ENUM,
-      values: ['coffee', 'desert', 'tea'],
+      values: ['ade', 'coffee', 'desert', 'tea'],
     },
-    amount: {
+    count: {
       allowNull: true,
       type: DataTypes.INTEGER,
       defaultValue: 0,

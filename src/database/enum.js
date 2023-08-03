@@ -1,6 +1,7 @@
 // src/database/models/enum.js
 
 const itemType = {
+  ADE: 'ade',
   COFFEE: 'coffee',
   DESERT: 'desert',
   TEA: 'tea',

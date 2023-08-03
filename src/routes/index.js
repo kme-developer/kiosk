@@ -4,6 +4,8 @@ import testRouter from './test';
 import itemRouter from './item';
 import orderRouter from './order';
 import optionRouter from './option';
+import userRouter from './user';
+import managerRouter from './manager';
 
 const router = express.Router();
 
@@ -15,5 +17,10 @@ router.use('/manager', itemRouter);
 router.use('/', orderRouter);
 // http://localhost:3000/api/manager
 router.use('/manager', optionRouter);
+
+// http://localhost:3000/api/user
+router.use('/user', userRouter);
+// http://localhost:3000/api/manager
+router.use('/manager', managerRouter);
 
 export default router;

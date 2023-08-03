@@ -5,10 +5,10 @@ export class OptionController {
   _responseService = new ResponseService();
 
   createOption = (req, res) => {
-    const { extraPrice, shotPrice, hot } = req.body;
+    const { name, extraPrice, shotPrice, hot } = req.body;
 
     this._optionService
-      .createOption(extraPrice, shotPrice, hot)
+      .createOption(name, extraPrice, shotPrice, hot)
       .then((body) => {
         this._responseService.sendResponse(res, 200, true, body);
       })

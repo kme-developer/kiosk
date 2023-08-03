@@ -1,14 +1,15 @@
-import { OrderService, ResponseService } from '../service';
+import { UserService } from '../service/user.service';
+import { ResponseService } from '../service';
 
-export class OrderController {
-  _orderService = new OrderService();
+export class UserController {
+  _userService = new UserService();
   _responseService = new ResponseService();
 
-  postOrder = (req, res) => {
-    const { userId } = req.user;
+  postUser = (req, res) => {
+    const { email, password } = req.body;
 
-    this._orderService
-      .postOrder(userId)
+    this._userService
+      .postUser(email, password)
       .then((body) => {
         this._responseService.sendResponse(res, 200, true, body);
       })
@@ -17,12 +18,11 @@ export class OrderController {
       });
   };
 
-  postOrderItem = (req, res) => {
-    const { itemId, orderId } = req.params;
-    const { amount, option } = req.body;
+  login = (req, res) => {
+    const { email, password } = req.body;
 
-    this._orderService
-      .postOrderItem(itemId, orderId, amount, option)
+    this._userService
+      .login(email, password)
       .then((body) => {
         this._responseService.sendResponse(res, 200, true, body);
       })
@@ -31,12 +31,11 @@ export class OrderController {
       });
   };
 
-  updateState = (req, res) => {
-    const { orderId } = req.params;
-    const { state } = req.body;
+  deleteUser = (req, res) => {
+    const { id } = req.user;
 
-    this._orderService
-      .updateState(orderId, state)
+    this._userService
+      .deleteUser(id)
       .then((body) => {
         this._responseService.sendResponse(res, 200, true, body);
       })
