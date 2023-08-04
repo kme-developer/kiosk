@@ -76,7 +76,7 @@ router.get('/order/:orderId', orderController.getOrderForNotUser);
 // http://localhost:3000/api/manager/order/:orderId/state
 router.put('/manager/order/:orderId/state', isManager, orderController.updateState);
 : `PENDING => COMPLETED`이 될 경우, 상품의 `count`가 1씩 증가
-: `COMPLETED => CANCELED`이 될 경우, 상품의 `count`가 1씩 감소
+: `COMPLETED => CANCELED`(환불)이 될 경우, 상품의 `count`가 1씩 감소
 
 [ user ]
 // http://localhost:3000/api/user/signup
