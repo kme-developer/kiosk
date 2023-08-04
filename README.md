@@ -31,6 +31,68 @@
 
 ```
 * API *
+[ option ]
+// http://localhost:3000/api/manager/option
+router.post('/option', isManager, optionController.createOption);
+// http://localhost:3000/api/manager/option/:optionId
+router.delete('/option/:optionId', isManager, optionController.deleteOption);
+
+[ item ]
+// http://localhost:3000/api/manager/item
+router.post('/manager/item', isManager, itemController.postItem);
+// http://localhost:3000/api/item
+router.get('/item', itemController.getItem);
+// http://localhost:3000/api/manager/item/:itemId
+router.put('/manager/item/:itemId', isManager, itemController.updateItem);
+// http://localhost:3000/api/manager/item/:itemId
+router.delete('/manager/item/:itemId', isManager, itemController.deleteItem);
+: 상품의 판매 이력(count)가 존재할 경우, 사용자에게 '판매 이력이 존재합니다. 삭제하시겠습니까?' 반환
+// http://localhost:3000/api/manager/response/item/:itemId
+router.delete('/manager/response/item/:itemId', isManager, itemController.deleteItemWithResponse);
+
+[ order ]
+// http://localhost:3000/api/order/:orderId
+router.post('/order/:orderId', isUser, orderController.postOrder);
+: 회원, 비회원만 주문이 가능함.
+: `front-end`에서
+{
+  "itemIds": [1, 2],
+  "amounts": [1, 1],
+  "options": [{ "extra": 0, "shot": 1, "hot": false }, { "extra": 1, "shot": 2, "hot": false }]
+}
+: 이와 같은 형태로 넘어온다고 가정하였음.
+: 주문이 생성된 후, 반복문을 통해 배열을 순회하면서 주문 상품들이 생성되는 구조.
+: 최종적으로 주문자에게 주문 번호와 총합 가격을 반환.
+// http://localhost:3000/api/manager/order
+router.get('/manager/order', isManager, orderController.getOrderForManager);
+: `state`를 입력했을 경우, 그에 해당하는 주문들만 반환
+: 기본적으로 주문의 `id`를 기준으로 내림차순 정렬
+// http://localhost:3000/api/user/:userId/order
+router.get('/user/:userId/order', isUser, orderController.getOrderForUser);
+: 기본적으로 주문의 `id`를 기준으로 내림차순 정렬
+// http://localhost:3000/api/order/:orderId
+router.get('/order/:orderId', orderController.getOrderForNotUser);
+: 비회원 주문 조회 기능이므로 주문 번호를 입력해야만 조회가 가능
+// http://localhost:3000/api/manager/order/:orderId/state
+router.put('/manager/order/:orderId/state', isManager, orderController.updateState);
+: `PENDING => COMPLETED`이 될 경우, 상품의 `count`가 1씩 증가
+: `COMPLETED => CANCELED`이 될 경우, 상품의 `count`가 1씩 감소
+
+[ user ]
+// http://localhost:3000/api/user/signup
+router.post('/signup', userController.postUser);
+// http://localhost:3000/api/user/login
+router.post('/login', userController.login);
+// http://localhost:3000/api/user/:userId
+router.delete('/:userId', isUser, userController.deleteUser);
+
+[ manager ]
+// http://localhost:3000/api/manager/signup
+router.post('/signup', managerController.postManager);
+// http://localhost:3000/api/manager/login
+router.post('/login', managerController.login);
+// http://localhost:3000/api/manager
+router.delete('/', isManager, managerController.deleteManager);
 ```
 
 ```
