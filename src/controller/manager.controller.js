@@ -43,4 +43,17 @@ export class ManagerController {
         this._responseService.sendResponse(res, 500, false, error);
       });
   };
+
+  getOrders = (req, res) => {
+    const { state } = req.body;
+
+    this._managerService
+      .getOrders(state)
+      .then((body) => {
+        this._responseService.sendResponse(res, 200, true, body);
+      })
+      .catch((error) => {
+        this._responseService.sendResponse(res, 500, false, error);
+      });
+  };
 }

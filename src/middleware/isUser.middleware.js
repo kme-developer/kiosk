@@ -8,6 +8,8 @@ const isUser = async (req, res, next) => {
   const { token } = req.headers;
 
   if (!token) {
+    const user = { id: '비회원' };
+    req.user = user;
     next();
   } else {
     try {

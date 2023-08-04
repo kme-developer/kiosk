@@ -11,5 +11,7 @@ router.post('/signup', managerController.postManager);
 router.post('/login', managerController.login);
 // http://localhost:3000/api/manager
 router.delete('/', isManager, managerController.deleteManager);
+// http://localhost:3000/api/manager
+router.get('/order', isManager, managerController.getOrders);
 
 export default router;

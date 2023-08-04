@@ -1,5 +1,7 @@
 import jwt from 'jsonwebtoken';
 import Managers from '../database/models/manager';
+import Orders from '../database/models/order';
+import { orderState } from '../database/enum';
 
 import dotenv from 'dotenv';
 dotenv.config();
@@ -61,6 +63,33 @@ export class ManagerService {
       return {
         message: 'manager, method: delete => success',
       };
+    } catch (error) {
+      return {
+        message: 'internal server error',
+      };
+    }
+  };
+
+  getOrders = async (state) => {
+    try {
+      if (!state) {
+        const allOrders = await Orders.findAll({});
+
+        return {
+          result: allOrders,
+        };
+      } else if (state) {
+        if (!Object.values(orderState).includes(state)) {
+          return {
+            message: '주문 상태를 올바르게 입력해주세요.',
+          };
+        }
+        const ordersWithState = await Orders.findAll({ where: { state } });
+
+        return {
+          result: ordersWithState,
+        };
+      }
     } catch (error) {
       return {
         message: 'internal server error',
