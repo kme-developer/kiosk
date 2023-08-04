@@ -18,6 +18,45 @@ export class OrderController {
       });
   };
 
+  getOrderForManager = (req, res) => {
+    const { state } = req.body;
+
+    this._orderService
+      .getOrderForManager(state)
+      .then((body) => {
+        this._responseService.sendResponse(res, 200, true, body);
+      })
+      .catch((error) => {
+        this._responseService.sendResponse(res, 500, false, error);
+      });
+  };
+
+  getOrderForUser = (req, res) => {
+    const { id } = req.user;
+
+    this._orderService
+      .getOrderForUser(id)
+      .then((body) => {
+        this._responseService.sendResponse(res, 200, true, body);
+      })
+      .catch((error) => {
+        this._responseService.sendResponse(res, 500, false, error);
+      });
+  };
+
+  getOrderForNotUser = (req, res) => {
+    const { orderId } = req.params;
+
+    this._orderService
+      .getOrderForNotUser(orderId)
+      .then((body) => {
+        this._responseService.sendResponse(res, 200, true, body);
+      })
+      .catch((error) => {
+        this._responseService.sendResponse(res, 500, false, error);
+      });
+  };
+
   updateState = (req, res) => {
     const { orderId } = req.params;
     const { state } = req.body;

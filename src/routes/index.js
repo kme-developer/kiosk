@@ -18,8 +18,8 @@ router.use('/', orderRouter);
 // http://localhost:3000/api/manager
 router.use('/manager', optionRouter);
 
-// http://localhost:3000/api
-router.use('/', userRouter);
+// http://localhost:3000/api/user
+router.use('/user', userRouter);
 // http://localhost:3000/api/manager
 router.use('/manager', managerRouter);
 

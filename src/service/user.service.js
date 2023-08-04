@@ -1,6 +1,5 @@
 import jwt from 'jsonwebtoken';
 import Users from '../database/models/user';
-import Orders from '../database/models/order';
 
 import dotenv from 'dotenv';
 dotenv.config();
@@ -59,32 +58,6 @@ export class UserService {
       await Users.destroy({ where: { id } });
       return {
         message: 'user, method: delete => success',
-      };
-    } catch (error) {
-      return {
-        message: 'internal server error',
-      };
-    }
-  };
-
-  getOrdersForUser = async (id) => {
-    try {
-      const orders = await Orders.findAll({ where: { user_id: id } });
-      return {
-        result: orders,
-      };
-    } catch (error) {
-      return {
-        message: 'internal server error',
-      };
-    }
-  };
-
-  getOrder = async (orderId) => {
-    try {
-      const order = await Orders.findOne({ where: { order_id: orderId } });
-      return {
-        result: order,
       };
     } catch (error) {
       return {

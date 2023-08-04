@@ -46,6 +46,59 @@ export class OrderService {
     }
   };
 
+  getOrderForManager = async (state) => {
+    try {
+      if (!state) {
+        const allOrders = await Orders.findAll({ order: [['id', 'DESC']] });
+
+        return {
+          result: allOrders,
+        };
+      } else if (state) {
+        if (!Object.values(orderState).includes(state)) {
+          return {
+            message: '주문 상태를 올바르게 입력해주세요.',
+          };
+        }
+        const ordersWithState = await Orders.findAll({ where: { state } });
+
+        return {
+          result: ordersWithState,
+        };
+      }
+    } catch (error) {
+      return {
+        message: 'internal server error',
+      };
+    }
+  };
+
+  getOrderForUser = async (id) => {
+    try {
+      const orders = await Orders.findAll({ where: { user_id: id }, order: [['id', 'DESC']] });
+      return {
+        result: orders,
+      };
+    } catch (error) {
+      return {
+        message: 'internal server error',
+      };
+    }
+  };
+
+  getOrderForNotUser = async (orderId) => {
+    try {
+      const order = await Orders.findOne({ where: { order_id: orderId } });
+      return {
+        result: order,
+      };
+    } catch (error) {
+      return {
+        message: 'internal server error',
+      };
+    }
+  };
+
   updateState = async (orderId, state) => {
     if (!Object.values(orderState).includes(type)) {
       return {
