@@ -1,11 +1,12 @@
 import { Items } from '../database/models/item';
 import { itemType } from '../database/enum';
+import { Cache } from '../cache/cache';
 
 export class ItemService {
   postItem = async (name, price, type) => {
     if (!name || !price) {
       return {
-        message: `{name}을 입력해주세요.`,
+        message: '상품명과 가격을 입력해주세요.',
       };
     }
 
@@ -37,8 +38,13 @@ export class ItemService {
     try {
       if (!type) {
         const allItems = await Items.findAll({});
+        const allItemsWithOption = allItems.map((item) => {
+          const option = Cache.getCache(`option${item.option_id}`);
+          item.option = option;
+          return item;
+        });
         return {
-          result: allItems,
+          result: allItemsWithOption,
         };
       } else if (type) {
         if (!Object.values(itemType).includes(type)) {
@@ -47,8 +53,13 @@ export class ItemService {
           };
         }
         const itemsWithType = await Items.findAll({ where: { type } });
+        const itemsWithTypeAndOption = itemsWithType.map((item) => {
+          const option = Cache.getCache(`option${item.option_id}`);
+          item.option = option;
+          return item;
+        });
         return {
-          result: itemsWithType,
+          result: itemsWithTypeAndOption,
         };
       }
     } catch (error) {
@@ -61,7 +72,7 @@ export class ItemService {
   updateItem = async (itemId, name, price) => {
     if (!name) {
       return {
-        message: '이름을 입력해주세요.',
+        message: '상품명을 입력해주세요.',
       };
     }
 
@@ -97,6 +108,7 @@ export class ItemService {
         };
       }
     } else {
+      await Cache.setCache(`item${itemId}`, itemId, 15000);
       return {
         message: '판매 이력이 존재합니다. 삭제하시겠습니까?',
       };
@@ -104,9 +116,16 @@ export class ItemService {
   };
 
   deleteItemWithResponse = async (itemId, answer) => {
+    const deleteItemId = await Cache.getCache(`item${itemId}`);
+    if (itemId !== deleteItemId) {
+      return {
+        message: '다시 시도해주세요.',
+      };
+    }
     if (answer === '예') {
       try {
         await Items.destroy({ where: { id: itemId } });
+        await Cache.deleteCache(`item${itemId}`);
         return {
           message: 'item, method: delete => success',
         };
@@ -116,6 +135,7 @@ export class ItemService {
         };
       }
     } else if (answer === '아니오') {
+      await Cache.deleteCache(`item${itemId}`);
       return;
     }
   };

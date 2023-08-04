@@ -6,23 +6,10 @@ export class OrderController {
 
   postOrder = (req, res) => {
     const { userId } = req.user;
+    const { itemIds, amounts, options } = req.body;
 
     this._orderService
-      .postOrder(userId)
-      .then((body) => {
-        this._responseService.sendResponse(res, 200, true, body);
-      })
-      .catch((error) => {
-        this._responseService.sendResponse(res, 500, false, error);
-      });
-  };
-
-  postOrderItem = (req, res) => {
-    const { itemId, orderId } = req.params;
-    const { amount, option } = req.body;
-
-    this._orderService
-      .postOrderItem(itemId, orderId, amount, option)
+      .postOrder(userId, itemIds, amounts, options)
       .then((body) => {
         this._responseService.sendResponse(res, 200, true, body);
       })

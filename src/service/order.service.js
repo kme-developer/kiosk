@@ -3,43 +3,41 @@ import Orders from '../database/models/order';
 import OrderItems from '../database/models/orderItem';
 import { orderState } from '../database/enum';
 import { Transaction } from 'sequelize';
+import Cache from '../cache/cache';
 
 export class OrderService {
-  postOrder = async (userId) => {
+  postOrder = async (userId, itemIds, amounts, options) => {
     try {
-      await Orders.create({
-        isUser: !!userId,
+      if (!itemIds || !amounts || !options) {
+        return {
+          message: '입력되지 않은 값이 존재합니다.',
+        };
+      }
+      const order = await Orders.create({
+        isUser: !!userId, // type => Boolean
         user_id: userId || null,
         state: 0, // default
       });
-      return {
-        message: 'order, method: post => success',
-      };
-    } catch (error) {
-      return {
-        message: 'internal server error',
-      };
-    }
-  };
+      for (let i = 0; i < itemIds.length; i++) {
+        const itemId = itemIds[i];
+        const amount = amounts[i];
+        const option = options[i];
 
-  postOrderItem = async (itemId, orderId, amount, option) => {
-    if (!option) {
-      return {
-        message: '상품의 option 값이 존재하지 않습니다.',
-      };
-    }
+        const item = await Items.findOne({ where: { id: itemId } });
+        const optionFromCache = Cache.getCache(`option${item.option_id}`);
 
-    try {
-      const item = await Items.findOne({ where: { id: itemId } });
-      await OrderItems.create({
-        item_id: itemId,
-        order_id: orderId,
-        amount: amount, // defaultValue: 1
-        option: option, // JSON
-        price: item.price + option.extra + option.shot,
-      });
+        await OrderItems.create({
+          item_id: itemId,
+          order_id: order.id,
+          amount: amount,
+          option: option,
+          price: item.price + optionFromCache.extra_price * option.extra + optionFromCache.shot_price * option.shot,
+        });
+      }
+      const orderItems = await OrderItems.findAll({ order_id: order.id });
+      const totalPrice = orderItems.reduce((total, item) => total + item.price, 0);
       return {
-        message: 'orderItem, method: post => success',
+        message: `주문 번호: ${order.id}, 총합 가격: ${totalPrice}`,
       };
     } catch (error) {
       return {

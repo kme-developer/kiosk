@@ -15,6 +15,10 @@ export class Cache {
     return this.cache.get(key);
   }
 
+  deleteCache(key) {
+    this.cache.del(key);
+  }
+
   flushCache() {
     this.cache.flushAll();
   }
