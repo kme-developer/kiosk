@@ -1,5 +1,6 @@
 ![KIOSK ERD](https://github.com/kme-developer/kiosk/assets/130229450/a55ce72d-b22b-4740-b3b4-454b98135fce)
 
+```
 * ERD *
 option
 : extra_price => `extra size`가 존재한다면 그에 대한 가격. 0일 경우 `extra size` 선택이 불가능한 상품.
@@ -28,6 +29,7 @@ order
 : state => 주문 상태를 ENUM을 이용해서 분류, `ordered, pending, completed, canceled`로 설정되어 있음.
 
 * API *
+```
 
 ```
 kiosk
