@@ -1,3 +1,4 @@
+![KIOSK ERD](https://github.com/kme-developer/kiosk/assets/130229450/a55ce72d-b22b-4740-b3b4-454b98135fce)
 
 ```
 kiosk
