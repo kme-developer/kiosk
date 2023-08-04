@@ -27,7 +27,9 @@
 [ order ]
 : isUser => 현재 `user`가 회원인지 비회원인지 BOOLEAN 값으로 구분.
 : state => 주문 상태를 ENUM을 이용해서 분류, `ordered, pending, completed, canceled`로 설정되어 있음.
+```
 
+```
 * API *
 ```
 
